@@ -156,7 +156,7 @@ export default function Footer({ scrollToSection }: FooterProps) {
              />
            </div>
          )}
-         <div className="mt-4 xs:mt-6 pt-3 xs:pt-4 text-center text-white/90 text-xs xs:text-sm">
+         <div className="mt-4 xs:mt-6 pt-3 xs:pt-4 text-center text-white/90 text-sm xs:text-sm">
            <p>© All Rights Reserved</p>
          </div>
       </div>

@@ -92,7 +92,7 @@ export default function Works({ works: propWorks, loading: propLoading }: WorksP
           </h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 xs:gap-6 sm:gap-8">
-          {worksArray.slice(0, 6).map((work) => {
+          {worksArray.map((work) => {
             const imageUrl = work.image || work.image_url;
             
             return (
