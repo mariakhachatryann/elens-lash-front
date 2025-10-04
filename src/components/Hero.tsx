@@ -34,7 +34,9 @@ export default function Hero({ scrollToSection }: HeroProps) {
               className="px-3 xs:px-4 sm:px-6 md:px-8 py-2 xs:py-2.5 sm:py-3 text-xs xs:text-sm sm:text-base md:text-lg font-medium transition-colors rounded-lg cursor-pointer" 
               style={{backgroundColor: '#635D56', color: '#E7DFD9'}}
             >
-              BOOK NOW
+              <a href='/'>
+                BOOK NOW
+              </a>
             </button>
           </div>
 
