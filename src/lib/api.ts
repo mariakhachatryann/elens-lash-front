@@ -10,6 +10,16 @@ export function getServiceImageUrl(image?: string): string | undefined {
   return `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/storage/${trimmed}`;
 }
 
+export function getContactLogoUrl(logo?: string): string | undefined {
+  if (!logo) return undefined;
+  const trimmed = logo.trim();
+  if (!trimmed) return undefined;
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed;
+  }
+  return `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/storage/${trimmed}`;
+}
+
 export interface Course {
   id: number;
   title: string;
@@ -62,6 +72,7 @@ export interface Contact {
   id: number;
   address: string;
   phone: string;
+  logo?: string;
   social_links?: {
     instagram?: string;
     facebook?: string;

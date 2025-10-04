@@ -3,6 +3,8 @@
 import { Abhaya_Libre } from 'next/font/google';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { api, Contact, getContactLogoUrl } from '../lib/api';
 
 const abhaya = Abhaya_Libre({ subsets: ['latin'], weight: '400' });
 
@@ -13,6 +15,25 @@ interface NavigationProps {
 export default function Navigation({ scrollToSection }: NavigationProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContacts = async () => {
+      try {
+        setLoading(true);
+        const contactsData = await api.getContacts();
+        setContacts(contactsData);
+      } catch (error) {
+        console.error('Error fetching contacts:', error);
+        setContacts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchContacts();
+  }, []);
 
   const goTo = (sectionId: string) => {
     if (pathname === '/' && typeof scrollToSection === 'function') {
@@ -22,12 +43,25 @@ export default function Navigation({ scrollToSection }: NavigationProps) {
     router.push(`/#${sectionId}`);
   };
 
+  const contact = contacts.length > 0 ? contacts[0] : null;
+  const logoUrl = getContactLogoUrl(contact?.logo);
+
   return (
     <nav className="w-full" style={{backgroundColor: '#E7DFD9'}}>
       <div className="max-w-7xl mx-auto px-2 xs:px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-[60px] xs:h-[70px] sm:h-[80px] md:h-[90px]">
-          <Link href="/" className={`${abhaya.className} text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-800`}>
-            Lorem Ipsum logo
+          <Link href="/" className="flex items-center">
+            {logoUrl ? (
+              <img 
+                src={logoUrl} 
+                alt="Logo" 
+                className="h-10 xs:h-10 sm:h-12 md:h-10 lg:h-10 object-contain"
+              />
+            ) : (
+              <span className={`${abhaya.className} text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-800`}>
+                ...
+              </span>
+            )}
           </Link>
           <div className="flex gap-1 xs:gap-2 sm:gap-4 md:gap-6 lg:gap-8 xl:gap-12">
             <button onClick={() => goTo('hero')} className="text-xs xs:text-sm sm:text-base font-medium text-gray-800 px-1 xs:px-2 py-1 hover:text-gray-600 transition-colors">Home</button>
