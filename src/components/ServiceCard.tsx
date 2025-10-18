@@ -8,9 +8,10 @@ interface ServiceCardProps {
   href?: string;
   image?: string;
   showActions?: boolean;
+  book_link?: string;
 }
 
-export default function ServiceCard({ title, description, price, href, image, showActions = false }: ServiceCardProps) {
+export default function ServiceCard({ title, description, price, href, image, showActions = false, book_link }: ServiceCardProps) {
   const resolvedImage = getServiceImageUrl(image);
 
   const CardContent = (
@@ -40,12 +41,23 @@ export default function ServiceCard({ title, description, price, href, image, sh
               <span className="font-bold text-[#6B6B6B] text-xs xs:text-sm sm:text-base">{price}$</span>
             </div>
           )}
-          <button
-            type="button"
-            className="text-[#635D56] font-bold tracking-wide hover:opacity-80 text-xs xs:text-sm sm:text-base"
-          >
-            BOOK NOW
-          </button>
+          {book_link ? (
+            <Link
+              href={book_link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#635D56] font-bold tracking-wide hover:opacity-80 text-xs xs:text-sm sm:text-base"
+            >
+              BOOK NOW
+            </Link>
+          ) : (
+            <button
+              type="button"
+              className="text-[#635D56] font-bold tracking-wide hover:opacity-80 text-xs xs:text-sm sm:text-base"
+            >
+              BOOK NOW
+            </button>
+          )}
         </div>
       )}
     </div>

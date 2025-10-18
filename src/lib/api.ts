@@ -73,6 +73,7 @@ export interface Contact {
   address: string;
   phone: string;
   logo?: string;
+  book_link?: string;
   social_links?: {
     instagram?: string;
     facebook?: string;

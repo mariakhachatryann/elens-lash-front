@@ -2,6 +2,9 @@
 
 import Image from 'next/image';
 import { Abhaya_Libre } from 'next/font/google';
+import { useEffect, useState } from 'react';
+import { api, Contact } from '../lib/api';
+import Link from 'next/link';
 
 const abhaya = Abhaya_Libre({ subsets: ['latin'], weight: '800' });
 
@@ -10,6 +13,27 @@ interface HeroProps {
 }
 
 export default function Hero({ scrollToSection }: HeroProps) {
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContacts = async () => {
+      try {
+        setLoading(true);
+        const contactsData = await api.getContacts();
+        setContacts(contactsData);
+      } catch (error) {
+        console.error('Error fetching contacts:', error);
+        setContacts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchContacts();
+  }, []);
+
+  const contact = contacts.length > 0 ? contacts[0] : null;
   return (
     <section id="hero" className="relative overflow-hidden flex items-center  min-h-[70vh] xs:min-h-[75vh] sm:min-h-[80vh]" style={{backgroundColor: '#E7DFD9'}}>
       <div className="max-w-7xl mx-auto px-2 xs:px-4 sm:px-6 lg:px-8 w-full">
@@ -29,15 +53,25 @@ export default function Hero({ scrollToSection }: HeroProps) {
                 LOOK
               </h4>
             </div>
-            <button 
-              onClick={() => scrollToSection('contact')} 
-              className="px-3 xs:px-4 sm:px-6 md:px-8 py-2 xs:py-2.5 sm:py-3 text-xs xs:text-sm sm:text-base md:text-lg font-medium transition-colors rounded-lg cursor-pointer" 
-              style={{backgroundColor: '#635D56', color: '#E7DFD9'}}
-            >
-              <a href='/'>
+            {contact?.book_link ? (
+              <Link
+                href={contact.book_link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block px-3 xs:px-4 sm:px-6 md:px-8 py-2 xs:py-2.5 sm:py-3 text-xs xs:text-sm sm:text-base md:text-lg font-medium transition-colors rounded-lg cursor-pointer hover:opacity-90" 
+                style={{backgroundColor: '#635D56', color: '#E7DFD9'}}
+              >
                 BOOK NOW
-              </a>
-            </button>
+              </Link>
+            ) : (
+              <button 
+                onClick={() => scrollToSection('contact')} 
+                className="px-3 xs:px-4 sm:px-6 md:px-8 py-2 xs:py-2.5 sm:py-3 text-xs xs:text-sm sm:text-base md:text-lg font-medium transition-colors rounded-lg cursor-pointer" 
+                style={{backgroundColor: '#635D56', color: '#E7DFD9'}}
+              >
+                BOOK NOW
+              </button>
+            )}
           </div>
 
           <div className="relative flex justify-center lg:justify-end mt-4 xs:mt-6 sm:mt-8 lg:mt-0">
