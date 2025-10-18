@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/api';
+export const API_BASE_URL = 'https://api.elenslashlounge.com/api';
 
 export function getServiceImageUrl(image?: string): string | undefined {
   if (!image) return undefined;
@@ -7,7 +7,7 @@ export function getServiceImageUrl(image?: string): string | undefined {
   if (/^https?:\/\//i.test(trimmed)) {
     return trimmed;
   }
-  return `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/storage/${trimmed}`;
+  return `https://api.elenslashlounge.com/storage/${trimmed}`;
 }
 
 export function getContactLogoUrl(logo?: string): string | undefined {
@@ -17,7 +17,7 @@ export function getContactLogoUrl(logo?: string): string | undefined {
   if (/^https?:\/\//i.test(trimmed)) {
     return trimmed;
   }
-  return `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/storage/${trimmed}`;
+  return `https://api.elenslashlounge.com/storage/${trimmed}`;
 }
 
 export interface Course {

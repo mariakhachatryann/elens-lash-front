@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { api, Work } from '../lib/api';
 
+import { API_BASE_URL } from "../lib/api";
+
 interface WorksProps {
   works?: Work[];
   loading?: boolean;
@@ -99,7 +101,7 @@ export default function Works({ works: propWorks, loading: propLoading }: WorksP
               <div key={work.id}  className="rounded-2xl overflow-hidden shadow-lg">
                 {imageUrl ? (
                   <img
-                    src={`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/storage/${imageUrl}`}
+                    src={`${API_BASE_URL}/storage/${imageUrl}`}
                     alt={work.title || `Work ${work.id}`}
                     className="w-full h-48 xs:h-56 sm:h-64 md:h-72 lg:h-80 object-cover"
                   />
