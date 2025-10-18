@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { api, Service } from '../../../lib/api';
+import { api, Service, Contact } from '../../../lib/api';
 import Navigation from '../../../components/Navigation';
 import ServiceCard from '../../../components/ServiceCard';
 import Footer from '../../../components/Footer';
@@ -10,8 +10,26 @@ export default function ServiceDetailClient({ id }: { id: number }) {
   const [service, setService] = useState<Service | null>(null);
   const [loading, setLoading] = useState(true);
   const [isClient, setIsClient] = useState(false);
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [contactsLoading, setContactsLoading] = useState(true);
 
   useEffect(() => setIsClient(true), []);
+
+  useEffect(() => {
+    const fetchContacts = async () => {
+      try {
+        setContactsLoading(true);
+        const contactsData = await api.getContacts();
+        setContacts(contactsData);
+      } catch (error) {
+        setContacts([]);
+      } finally {
+        setContactsLoading(false);
+      }
+    };
+
+    fetchContacts();
+  }, []);
 
   useEffect(() => {
     if (!Number.isFinite(id)) return;
@@ -69,16 +87,20 @@ export default function ServiceDetailClient({ id }: { id: number }) {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-15">
                 {Array.isArray(service.children) && service.children.length > 0 ? (
-                  service.children.map((child) => (
-                    <ServiceCard
-                      key={child.id}
-                      title={child.title}
-                      description={child.description}
-                      price={child.price ?? undefined as unknown as number}
-                      image={(child.image ?? undefined) as string | undefined}
-                      showActions
-                    />
-                  ))
+                  service.children.map((child) => {
+                    const contact = contacts.length > 0 ? contacts[0] : null;
+                    return (
+                      <ServiceCard
+                        key={child.id}
+                        title={child.title}
+                        description={child.description}
+                        price={child.price ?? undefined as unknown as number}
+                        image={(child.image ?? undefined) as string | undefined}
+                        showActions
+                        book_link={contact?.book_link}
+                      />
+                    );
+                  })
                 ) : (
                   <p className="text-gray-600">No child services available.</p>
                 )}
